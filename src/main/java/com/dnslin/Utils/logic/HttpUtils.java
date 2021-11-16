@@ -107,7 +107,7 @@ public class HttpUtils {
      * @return HttpClientResult
      * @throws Exception
      */
-    public static HttpClientResult doGet(String url, Map<String, String> params) {
+    public static HttpClientResult doGet(String url, Map<String, String> params) throws IOException {
         return doGet(url, null, params);
     }
 
@@ -120,7 +120,7 @@ public class HttpUtils {
      * @return HttpClientResult
      * @throws Exception
      */
-    public static HttpClientResult doGet(String url, Map<String, String> headers, Map<String, String> params) {
+    public static HttpClientResult doGet(String url, Map<String, String> headers, Map<String, String> params) throws IOException {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
 
@@ -179,7 +179,7 @@ public class HttpUtils {
      * @return CloseableHttpResponse
      * @throws Exception
      */
-    public static CloseableHttpResponse doGets(String url) {
+    public static CloseableHttpResponse doGets(String url) throws IOException {
         return doGets(url, null, null);
     }
 
@@ -191,7 +191,7 @@ public class HttpUtils {
      * @return CloseableHttpResponse
      * @throws Exception
      */
-    public static CloseableHttpResponse doGets(String url, Map<String, String> params) {
+    public static CloseableHttpResponse doGets(String url, Map<String, String> params) throws IOException {
         return doGets(url, null, params);
     }
 
@@ -204,7 +204,7 @@ public class HttpUtils {
      * @return CloseableHttpResponse
      * @throws Exception
      */
-    public static CloseableHttpResponse doGets(String url, Map<String, String> headers, Map<String, String> params) {
+    public static CloseableHttpResponse doGets(String url, Map<String, String> headers, Map<String, String> params) throws IOException {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
 
@@ -262,7 +262,7 @@ public class HttpUtils {
      * @return HttpClientResult
      * @throws Exception
      */
-    public static HttpClientResult doPost(String url) {
+    public static HttpClientResult doPost(String url) throws IOException {
         return doPost(url, null, null);
     }
 
@@ -274,7 +274,7 @@ public class HttpUtils {
      * @return HttpClientResult
      * @throws Exception
      */
-    public static HttpClientResult doPost(String url, Map<String, String> params) {
+    public static HttpClientResult doPost(String url, Map<String, String> params) throws IOException {
         return doPost(url, null, params);
     }
 
@@ -287,7 +287,7 @@ public class HttpUtils {
      * @return HttpClientResult
      * @throws Exception
      */
-    public static HttpClientResult doPost(String url, Map<String, String> headers, Map<String, String> params) {
+    public static HttpClientResult doPost(String url, Map<String, String> headers, Map<String, String> params) throws IOException {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
 
@@ -325,8 +325,9 @@ public class HttpUtils {
      * @return response
      * @throws Exception
      */
-    public static CloseableHttpResponse doPosts(String url) {
-        return doPosts(url, null, null);
+    public static CloseableHttpResponse doPosts(String url) throws IOException {
+        CloseableHttpResponse closeableHttpResponse = doPosts(url, null, null);
+        return closeableHttpResponse;
     }
 
     /**
@@ -337,7 +338,7 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static CloseableHttpResponse doPosts(String url, Map<String, String> params) {
+    public static CloseableHttpResponse doPosts(String url, Map<String, String> params)throws IOException {
         return doPosts(url, null, params);
     }
 
@@ -350,7 +351,7 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static CloseableHttpResponse doPosts(String url, Map<String, String> headers, Map<String, String> params) {
+    public static CloseableHttpResponse doPosts(String url, Map<String, String> headers, Map<String, String> params) throws IOException {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
 
@@ -401,7 +402,7 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static HttpClientResult doPut(String url, Map<String, String> params) {
+    public static HttpClientResult doPut(String url, Map<String, String> params) throws IOException{
         CloseableHttpClient httpClient = getHttpClient();
         HttpPut httpPut = new HttpPut(url);
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
@@ -437,7 +438,7 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static CloseableHttpResponse doPuts(String url, Map<String, String> params) {
+    public static CloseableHttpResponse doPuts(String url, Map<String, String> params) throws IOException{
         CloseableHttpClient httpClient = getHttpClient();
         HttpPut httpPut = new HttpPut(url);
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
@@ -483,7 +484,7 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static HttpClientResult doDelete(String url, Map<String, String> params) {
+    public static HttpClientResult doDelete(String url, Map<String, String> params) throws IOException {
         if (params == null) {
             params = new HashMap<String, String>();
         }
@@ -500,7 +501,7 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static CloseableHttpResponse doDeletes(String url) {
+    public static CloseableHttpResponse doDeletes(String url) throws IOException{
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpDelete httpDelete = new HttpDelete(url);
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
@@ -522,7 +523,7 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static CloseableHttpResponse doDeletes(String url, Map<String, String> params){
+    public static CloseableHttpResponse doDeletes(String url, Map<String, String> params) throws IOException {
         if (params == null) {
             params = new HashMap<String, String>();
         }
@@ -547,7 +548,7 @@ public class HttpUtils {
                                               Map<String, String> params,
                                               Map<String, String> headers,
                                               String filePath,
-                                              String fileType) {
+                                              String fileType) throws IOException {
         final CloseableHttpClient httpClient = HttpClients.createDefault();
         final HttpPost httpPost = new HttpPost(url);
         httpPost.setHeader("Content-Type", "multipart/form-data");
@@ -689,7 +690,7 @@ public class HttpUtils {
      * @author DnsLin
      * @date 2021/11/6 13:53
      */
-    public static CookieStore getCookieStore(String url) {
+    public static CookieStore getCookieStore(String url) throws IOException {
         return getCookieStore(url, null, null);
     }
 
@@ -700,7 +701,7 @@ public class HttpUtils {
      * @author DnsLin
      * @date 2021/11/6 13:53
      */
-    public static CookieStore getCookieStore(String url, Map<String, String> headers) {
+    public static CookieStore getCookieStore(String url, Map<String, String> headers) throws IOException {
         return getCookieStore(url, headers, null);
     }
 
@@ -712,7 +713,7 @@ public class HttpUtils {
      * @author DnsLin
      * @date 2021/11/6 13:53
      */
-    public static CookieStore getCookieStore(String url, Map<String, String> headers, Map<String, String> params) {
+    public static CookieStore getCookieStore(String url, Map<String, String> headers, Map<String, String> params) throws IOException {
         CloseableHttpClient httpClient = getHttpClient();
         HttpClientContext context = HttpClientContext.create();
         // 创建访问的地址
@@ -771,7 +772,7 @@ public class HttpUtils {
      * @author DnsLin
      * @date 2021/11/6 13:53
      */
-    public static List<Cookie> getCookies(String url) {
+    public static List<Cookie> getCookies(String url) throws IOException {
         return getCookieStore(url).getCookies();
     }
 
@@ -782,23 +783,13 @@ public class HttpUtils {
      * @param httpClient
      * @throws IOException
      */
-    public static void release(CloseableHttpResponse httpResponse, CloseableHttpClient httpClient) {
+    public static void release(CloseableHttpResponse httpResponse, CloseableHttpClient httpClient) throws IOException {
         // 释放资源
         if (httpResponse != null) {
-            try {
-                httpResponse.close();
-            } catch (IOException e) {
-                Console.log("释放资源！！！IO流异常");
-                e.printStackTrace();
-            }
+            httpResponse.close();
         }
         if (httpClient != null) {
-            try {
-                httpClient.close();
-            } catch (IOException e) {
-                Console.log("释放资源！！！IO流异常");
-                e.printStackTrace();
-            }
+            httpClient.close();
         }
     }
 
