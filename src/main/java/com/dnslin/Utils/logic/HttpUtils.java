@@ -6,7 +6,6 @@ import com.dnslin.Utils.result.HttpClientResult;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -95,7 +94,7 @@ public class HttpUtils {
      * @return HttpClientResult
      * @throws Exception
      */
-    public static HttpClientResult doGet(String url) {
+    public static HttpClientResult doGet(String url) throws IOException {
         return doGet(url, null, null);
     }
 
