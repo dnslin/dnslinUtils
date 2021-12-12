@@ -419,6 +419,33 @@ public class HttpUtils {
     }
 
     /**
+     * 发送put请求；带请求参数
+     *
+     * @param url    请求地址
+     * @param params 参数集合
+     * @return
+     * @throws Exception
+     */
+    public static HttpClientResult doPut(String url, Map<String, String> headers, Map<String, String> params) throws IOException{
+        CloseableHttpClient httpClient = getHttpClient();
+        HttpPut httpPut = new HttpPut(url);
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
+        httpPut.setConfig(requestConfig);
+        // 设置请求头
+        packageHeader(headers, httpPut);
+        packageParam(params, httpPut);
+
+        CloseableHttpResponse httpResponse = null;
+
+        try {
+            return getHttpClientResult(httpResponse, httpClient, httpPut);
+        } finally {
+            release(httpResponse, httpClient);
+        }
+    }
+
+
+    /**
      * 发送put请求；不带请求参数
      *
      * @param url 请求地址
@@ -443,6 +470,34 @@ public class HttpUtils {
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
         httpPut.setConfig(requestConfig);
 
+        packageParam(params, httpPut);
+
+        CloseableHttpResponse httpResponse = null;
+
+        try {
+            return getResponse(httpResponse, httpClient, httpPut);
+        } finally {
+            release(httpResponse, httpClient);
+        }
+    }
+
+
+
+    /**
+     * 发送put请求；带请求参数
+     *
+     * @param url    请求地址
+     * @param params 参数集合
+     * @return
+     * @throws Exception
+     */
+    public static CloseableHttpResponse doPuts(String url, Map<String, String> headers, Map<String, String> params) throws IOException{
+        CloseableHttpClient httpClient = getHttpClient();
+        HttpPut httpPut = new HttpPut(url);
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
+        httpPut.setConfig(requestConfig);
+        // 设置请求头
+        packageHeader(headers, httpPut);
         packageParam(params, httpPut);
 
         CloseableHttpResponse httpResponse = null;
