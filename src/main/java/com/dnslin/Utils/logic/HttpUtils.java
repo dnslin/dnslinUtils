@@ -730,7 +730,7 @@ public class HttpUtils {
         //生成multipart/form-data的entity
         final HttpEntity multipartEntity = builder.build();
         httpPost.setEntity(multipartEntity);
-        log.info("请求实体：{}",multipartEntity);
+        log.info("请求实体：{}",multipartEntity.toString());
         CloseableHttpResponse response = null;
         try {
             return getHttpClientResult(response, httpClient, httpPost);
@@ -739,6 +739,47 @@ public class HttpUtils {
         }
     }
 
+    /**
+     * 发送上传文件请求；
+     *
+     * @param url      请求地址
+     * @param params   参数集合
+     * @param headers  请求头集合
+     * @param file      文件byte
+     * @return HttpClientResult
+     * @throws Exception
+     */
+    public static HttpClientResult uploadFile(String url,
+                                              Map<String, String> params,
+                                              Map<String, String> headers,
+                                              String type,
+                                              byte[] file) throws IOException {
+        final CloseableHttpClient httpClient = HttpClients.createDefault();
+        final HttpPost httpPost = new HttpPost(url);
+        httpPost.setHeader("Content-Type", "multipart/form-data");
+        packageHeader(headers, httpPost);
+        //创建multipart/form-data的entity的builder
+        final MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        //将文件加在http的post请求中
+        builder.addBinaryBody(type,file);
+        if (params != null) {
+            final JSONObject jsonObject = new JSONObject();
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                jsonObject.put(entry.getKey(), entry.getValue());
+            }
+            builder.addTextBody(jsonObject.toString(), ContentType.APPLICATION_JSON.toString());
+        }
+        //生成multipart/form-data的entity
+        final HttpEntity multipartEntity = builder.build();
+        httpPost.setEntity(multipartEntity);
+        log.info("请求实体：{}",multipartEntity.toString());
+        CloseableHttpResponse response = null;
+        try {
+            return getHttpClientResult(response, httpClient, httpPost);
+        } finally {
+            release(response, httpClient);
+        }
+    }
 
     /**
      * 发送上传文件请求；
@@ -807,8 +848,7 @@ public class HttpUtils {
                                               Map<String, String> params,
                                               Map<String, String> headers,
                                               String type,
-                                              byte[] file,
-                                              String filename) throws IOException {
+                                              byte[] file) throws IOException {
         final CloseableHttpClient httpClient = HttpClients.createDefault();
         final HttpPut httpPut = new HttpPut(url);
         httpPut.setHeader("Content-Type", "multipart/form-data");
@@ -816,7 +856,7 @@ public class HttpUtils {
         //创建multipart/form-data的entity的builder
         final MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         //将文件加在http的post请求中
-        builder.addBinaryBody(type,file,ContentType.APPLICATION_OCTET_STREAM,filename);
+        builder.addBinaryBody(type,file);
         if (params != null) {
             final JSONObject jsonObject = new JSONObject();
             for (Map.Entry<String, String> entry : params.entrySet()) {
